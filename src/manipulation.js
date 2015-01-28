@@ -467,7 +467,7 @@ jQuery.fn.extend({
 		// Flatten any nested arrays
 		args = concat.apply( [], args );
 
-		var fragment, first, scripts, hasScripts, node, doc,
+		var fragment, first, scripts, hasScripts, node, doc, scriptContent,
 			i = 0,
 			l = this.length,
 			set = this,
@@ -537,7 +537,8 @@ jQuery.fn.extend({
 									jQuery._evalUrl( node.src );
 								}
 							} else {
-								jQuery.globalEval( node.textContent.replace( rcleanScript, "" ) );
+								scriptContent = node.textContent.replace( rcleanScript, "" );
+								jQuery.globalEval( scriptContent, doc );
 							}
 						}
 					}

@@ -254,27 +254,13 @@ jQuery.extend({
 			typeof obj;
 	},
 
-	// Evaluates a script in a global context
-	globalEval: function( code ) {
-		var script,
-			indirect = eval;
+	// Evaluates a script in a global context (or the passed context)
+	globalEval: function( code, context ) {
+		context = context || document;
+		var script = context.createElement( "script" );
 
-		code = jQuery.trim( code );
-
-		if ( code ) {
-			// If the code includes a valid, prologue position
-			// strict mode pragma, execute code by injecting a
-			// script tag into the document.
-			if ( code.indexOf("use strict") === 1 ) {
-				script = document.createElement("script");
-				script.text = code;
-				document.head.appendChild( script ).parentNode.removeChild( script );
-			} else {
-			// Otherwise, avoid the DOM node creation, insertion
-			// and removal by using an indirect global eval
-				indirect( code );
-			}
-		}
+		script.text = code;
+		context.head.appendChild( script ).parentNode.removeChild( script );
 	},
 
 	// Convert dashed to camelCase; used by the css and data modules
