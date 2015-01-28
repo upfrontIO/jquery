@@ -9,7 +9,7 @@
  * Released under the MIT license
  * http://jquery.org/license
  *
- * Date: 2014-12-18T15:11Z
+ * Date: 2015-01-28T18:07Z
  */
 
 (function( global, factory ) {
@@ -307,27 +307,13 @@ jQuery.extend({
 			typeof obj;
 	},
 
-	// Evaluates a script in a global context
-	globalEval: function( code ) {
-		var script,
-			indirect = eval;
+	// Evaluates a script in a global context (or the passed context)
+	globalEval: function( code, context ) {
+		context = context || document;
+		var script = context.createElement( "script" );
 
-		code = jQuery.trim( code );
-
-		if ( code ) {
-			// If the code includes a valid, prologue position
-			// strict mode pragma, execute code by injecting a
-			// script tag into the document.
-			if ( code.indexOf("use strict") === 1 ) {
-				script = document.createElement("script");
-				script.text = code;
-				document.head.appendChild( script ).parentNode.removeChild( script );
-			} else {
-			// Otherwise, avoid the DOM node creation, insertion
-			// and removal by using an indirect global eval
-				indirect( code );
-			}
-		}
+		script.text = code;
+		context.head.appendChild( script ).parentNode.removeChild( script );
 	},
 
 	// Convert dashed to camelCase; used by the css and data modules
@@ -5357,7 +5343,7 @@ jQuery.fn.extend({
 		// Flatten any nested arrays
 		args = concat.apply( [], args );
 
-		var fragment, first, scripts, hasScripts, node, doc,
+		var fragment, first, scripts, hasScripts, node, doc, scriptContent,
 			i = 0,
 			l = this.length,
 			set = this,
@@ -5427,7 +5413,8 @@ jQuery.fn.extend({
 									jQuery._evalUrl( node.src );
 								}
 							} else {
-								jQuery.globalEval( node.textContent.replace( rcleanScript, "" ) );
+								scriptContent = node.textContent.replace( rcleanScript, "" );
+								jQuery.globalEval( scriptContent, doc );
 							}
 						}
 					}
