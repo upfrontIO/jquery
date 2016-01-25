@@ -1,5 +1,5 @@
 {
-  "name": "jquery",
+  "name": "@livingdocs/jquery",
   "title": "jQuery",
   "description": "JavaScript library for DOM operations",
   "version": "2.1.3",
